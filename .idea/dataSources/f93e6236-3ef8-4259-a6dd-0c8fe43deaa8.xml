@@ -900,13 +900,22 @@
     </column>
     <column id="223" parent="209" name="authority">
       <Position>4</Position>
-      <DataType>varchar(255)|0s</DataType>
+      <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="224" parent="209" name="PRIMARY">
+    <index id="224" parent="209" name="users_username_uindex">
+      <ColNames>username</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="225" parent="209" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
+    </key>
+    <key id="226" parent="209" name="users_username_uindex">
+      <ColNames>username</ColNames>
+      <UnderlyingIndexName>users_username_uindex</UnderlyingIndexName>
     </key>
   </database-model>
 </dataSource>

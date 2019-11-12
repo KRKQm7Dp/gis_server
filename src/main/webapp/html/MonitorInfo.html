@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Document</title>
+</head>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Hl9ilifpSS4R092AugXaUPXGztehYAML"></script>
+<link rel="stylesheet" href="../css/MonitorInfo.css" type="text/css" />
+
+<body>
+    <img src="./img/定位.png" alt="" id="location">
+    <div id="allmap"></div> 
+	<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none; position: absolute; top: 150px;"></div>
+    <div id="r-result">
+        <input type="text" id="suggestId" size="20" value="百度" />
+        <button id="searchID" >搜索</button>
+        <a href="./navigation.html"><button id="navigation">导航</button></a>
+    </div>
+    <div id="s-result"></div>
+    <div id="userAvatar"><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560079006087&di=86350f0eecac70820bb7a7c84cf81654&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201609%2F16%2F20160916154847_3YfGx.jpeg" alt=""></div>
+    <div id="chooseProject" onclick="showDiv()">
+        <img src="../img/监控.png" alt="">
+        <p style="display: inline">监控信息</p>
+        <img src="../img/箭头.png" alt="" id="changeimg">
+    </div>
+    <div id="choose">
+        <ul id="widget-menu"  style="display: none; ">
+            <li id="deviceInfo">
+                <img src="../img/眼睛.png" alt="" >
+                <a href="./deviceInfo.html"><p style="display: inline">设备信息</p></a>
+            </li>
+            <li id="weather">
+                <img src="../img/天气.png" alt="">
+                <p style="display: inline">天气</p>
+            </li>
+            <li id="MonitorInfo">
+                <img src="../img/监控.png" alt="">
+                <a href="./MonitorInfo.html"><p style="display: inline">监控信息</p></a>
+            </li>
+        </ul>
+    </div>
+    <div id="m-message"></div>
+    <div id="all">查看全部设备</div>
+    <div id="allpro">
+</body>
+</body>
+<script type="text/javascript">
+   function showDiv(){
+        var obj_lis = document.getElementById("widget-menu").getElementsByTagName("li");
+        for(i=0;i<obj_lis.length;i++){
+            obj_lis[i].onclick = function(){
+                document.getElementById('chooseProject').innerHTML = this.innerHTML;
+                document.getElementById('widget-menu').style.display = "none";
+            }
+        }
+        var a = document.getElementById('widget-menu').style.display;
+        if(a=="block"){
+            document.getElementById('widget-menu').style.display = "none";
+        }else{
+            document.getElementById('widget-menu').style.display = "block";
+        }
+       }  
+
+
+	// 百度地图API功能
+    function G(id) {
+		return document.getElementById(id);
+	}
+
+
+	var map = new BMap.Map("allmap",{minZoom:20,maxZoom:17});
+	var point = new BMap.Point(126.627938, 45.715051);
+	map.centerAndZoom(point,17);
+
+
+
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+		{"input" : "suggestId"
+		,"location" : map
+	});
+    ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+	var str = "";
+		var _value = e.fromitem.value;
+		var value = "";
+		if (e.fromitem.index > -1) {
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+		
+		value = "";
+		if (e.toitem.index > -1) {
+			_value = e.toitem.value;
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+		G("searchResultPanel").innerHTML = str;
+	});
+
+	var myValue;
+	ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+	var _value = e.item.value;
+		myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		setPlace(myValue);
+	});
+
+    var searchID = document.getElementById("searchID");
+    searchID.addEventListener("click",function(){
+        var inputValue = document.getElementById("suggestId").value; 
+        setPlace(inputValue);
+    });
+
+	function setPlace(myValue){
+	var local = new BMap.LocalSearch(map, {
+		renderOptions:{map: map, panel:"s-result"},
+		pageCapacity:5
+	});
+	local.search(myValue);
+	}
+
+	map.enableScrollWheelZoom(); 
+
+
+
+    var data_info = [[126.627938, 45.715051,"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>监控设备1</h4>" + 
+    "<h6 style='margin:0 0 2px 0;padding:0.2em 0'>监控状态：正常</h6>" + 
+	"<img style='float:left;margin:4px' id='imgDemo' src='../img/监控视频1.jpg' width='200' height='104' title='天安门'/>" + 
+	"</div>"],
+					 [126.621940, 45.716048,"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>监控设备2</h4>" + 
+    "<h6 style='margin:0 0 2px 0;padding:0.2em 0'>监控状态：正常</h6>" + 
+	"<img style='float:left;margin:4px' id='imgDemo' src='../img/监控视频2.jpg' width='200' height='104' title='天安门'/>" + 
+	"</div>"],
+					 [126.626351, 45.714055,"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>监控设备3</h4>" + 
+    "<h6 style='margin:0 0 2px 0;padding:0.2em 0'>监控状态：正常</h6>" + 
+	"<img style='float:left;margin:4px' id='imgDemo' src='../img/监控视频3.jpg' width='200' height='104' title='天安门'/>" + 
+	"</div>"]
+					];
+	var opts = {
+				width : 100,     // 信息窗口宽度
+				height: 190,     // 信息窗口高度
+				enableMessage:true,//设置允许信息窗发送短息
+			   };
+	for(var i=0;i<data_info.length;i++){
+		var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+		var content = data_info[i][2];
+		map.addOverlay(marker);               // 将标注添加到地图中
+		addClickHandler(content,marker);
+	}
+	function addClickHandler(content,marker){
+		marker.addEventListener("click",function(e){
+			openInfo(content,e)}
+		);
+	}
+	function openInfo(content,e){
+		var p = e.target;
+		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+        map.openInfoWindow(infoWindow,point); //开启信息窗口
+        //---------------------------跳转到监控界面-------------------------------------
+        map.onclick = function(){
+            console.log("***************");
+            window.location.href = "http://localhost:8080/index.html";
+        }
+	}
+    
+    var all = document.getElementById("all");
+    var allpro = document.getElementById("allpro");
+    all.addEventListener('click',function(){
+        all.innerHTML = "查看单个设备"
+        var allproject1 = document.createElement('div');
+        allproject1.id = "allproject1";
+        allproject1.innerHTML = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>监控设备1</h4>" + 
+    "<h6 style='margin:0 0 2px 0;padding:0.2em 0'>监控状态：正常</h6>" + 
+	"<img style='float:left;margin:4px' id='imgDemo' src='../img/监控视频1.jpg' width='200' height='104' title='天安门'/>" + 
+    "</div>";
+        allproject1.style.background = "#fff";
+        allproject1.style.padding = "10px";
+        allproject1.style.position = "absolute";
+        allproject1.style.left = "40px";
+        allproject1.style.top = "550px";
+        allproject1.style.border = "1px solid #a5a5a0";
+        allpro.appendChild(allproject1);
+
+        var allproject2 = document.createElement('div');
+        allproject2.id = "allproject2";
+        allproject2.innerHTML = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>监控设备2</h4>" + 
+    "<h6 style='margin:0 0 2px 0;padding:0.2em 0'>监控状态：正常</h6>" + 
+	"<img style='float:left;margin:4px' id='imgDemo' src='../img/监控视频2.jpg' width='200' height='104' title='天安门'/>" + 
+	"</div>";
+        allproject2.style.background = "#fff";
+        allproject2.style.padding = "10px";
+        allproject2.style.position = "absolute";
+        allproject2.style.left = "340px";
+        allproject2.style.top = "550px";
+        allproject2.style.border = "1px solid #a5a5a0";
+        allpro.appendChild(allproject2);
+
+        var allproject3 = document.createElement('div');
+        allproject3.id = "allproject3";
+        allproject3.innerHTML = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>监控设备3</h4>" + 
+    "<h6 style='margin:0 0 2px 0;padding:0.2em 0'>监控状态：正常</h6>" + 
+	"<img style='float:left;margin:4px' id='imgDemo' src='../img/监控视频3.jpg' width='200' height='104' title='天安门'/>" + 
+	"</div>";
+        allproject3.style.background = "#fff";
+        allproject3.style.padding = "10px";
+        allproject3.style.position = "absolute";
+        allproject3.style.left = "640px";
+        allproject3.style.top = "550px";
+        allproject3.style.border = "1px solid #a5a5a0";
+        allpro.appendChild(allproject3);
+
+        var a = document.getElementById('allpro').style.display;
+        if(a=="block"){
+            document.getElementById('allpro').style.display = "none";
+        }else{
+            document.getElementById('allpro').style.display = "block";
+        }
+
+    });
+    
+
+</script>
+</html>

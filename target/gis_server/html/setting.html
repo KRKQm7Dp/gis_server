@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Document</title>
+</head>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Hl9ilifpSS4R092AugXaUPXGztehYAML"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="../css/setting.css" type="text/css" />
+<body>
+    <div id="allmap"></div> 
+	<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none; position: absolute; top: 150px;"></div>
+    <div id="nav">
+        <img src="../img/导航栏_模式02.png" alt="" id="nav02">
+        <p style="display: inline" id="user">欢迎您&nbsp;&nbsp;管理员</p>
+        <div id="r-result">
+            <input type="text" id="suggestId" size="20" value="百度" / placeholder="请输入您要查询的地点">
+            <button id="searchID">搜索</button>
+            <a href="./navigation.html"><button id="navigation">导航</button></a>
+        </div>
+        <div id="s-result"></div>
+        <div id="userAvatar"><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560079006087&di=86350f0eecac70820bb7a7c84cf81654&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201609%2F16%2F20160916154847_3YfGx.jpeg" alt=""></div>
+    </div>
+    <div id="umessage">
+         <p>园区管理系统</p>
+        <ul id="umenu">
+            <p>设备管理</p>
+            <img src="../img/箭头.png" alt="">
+            <div id="total">
+                <div id="one">设备1</div>
+                <div id="two">设备2</div>
+            </div>
+            <div id="addt" onclick="addthings(this)">添加</div>
+        </ul>
+    </div>
+    <div id="changeall">
+        <div id="change">
+            型号：<p class="edit" style="display:inline">432</p><br>
+            编号：<p class="edit" style="display:inline">54</p><br>
+            状态：<p class="edit" style="display:inline">65</p><br>
+            位置：<p class="edit" style="display:inline">23</p>
+            <div id="add" onclick="change(this)">修改</div>
+            <div id="delete" onclick="deleted2(this)">删除</div>
+        </div>
+    </div>
+    <div id="change1">
+        型号：<p class="edit" style="display:inline">43ew</p><br>
+        编号：<p class="edit" style="display:inline">5ew4</p><br>
+        状态：<p class="edit" style="display:inline">6w5</p><br>
+        位置：<p class="edit" style="display:inline">2q3</p>
+        <div id="add" onclick="change(this)">修改</div>
+        <div id="delete" onclick="deleted1(this)">删除</div>
+    </div>
+</body>
+</body>
+<script type="text/javascript">
+
+	// 百度地图API功能
+    function G(id) {
+		return document.getElementById(id);
+	}
+
+
+	var map = new BMap.Map("allmap",{minZoom:20,maxZoom:17});
+	var point = new BMap.Point(126.627938, 45.715051);
+	map.centerAndZoom(point,17);
+
+
+
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+		{"input" : "suggestId"
+		,"location" : map
+	});
+    ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+	var str = "";
+		var _value = e.fromitem.value;
+		var value = "";
+		if (e.fromitem.index > -1) {
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+		
+		value = "";
+		if (e.toitem.index > -1) {
+			_value = e.toitem.value;
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+		G("searchResultPanel").innerHTML = str;
+	});
+
+	var myValue;
+	ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+	var _value = e.item.value;
+		myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		setPlace(myValue);
+	});
+
+
+    var searchID = document.getElementById("searchID");
+    searchID.addEventListener("click",function(){
+        var inputValue = document.getElementById("suggestId").value; 
+        setPlace(inputValue);
+    });
+
+	function setPlace(myValue){
+	var local = new BMap.LocalSearch(map, {
+		renderOptions:{map: map, panel:"s-result"},
+		pageCapacity:5
+	});
+	local.search(myValue);
+	}
+
+	map.enableScrollWheelZoom(); 
+
+    var nav02 = document.getElementById("nav02");
+    nav02.addEventListener('click',function(){
+        var user = document.getElementById("user");
+        user.style.display = "none";
+        nav02.style.left = "200px";
+        var a = document.getElementById('umessage').style.display;
+        if(a=="block"){
+            document.getElementById('umessage').style.display = "none";
+            nav02.style.left = "30px";
+        }else{
+            document.getElementById('umessage').style.display = "block";
+        }
+    });
+    var one = document.getElementById("one");
+    one.addEventListener('click',function(){
+        document.getElementById('change').style.display = "block";
+    });
+    var two = document.getElementById("two");
+    two.addEventListener('click',function(){
+        document.getElementById('change1').style.display = "block";
+    });
+    function change(obj){   
+    　　var xg=$(obj).html();   
+    　　if(xg=='修改'){   
+    　　　　$('.edit').each(function(){   
+    　　　　　　var old=$(this).html();   
+    　　　　　　$(this).html("<input type='text' name='editname' class='text' value="+old+" >");   
+    　　　　})   
+    　　　　$(obj).html('保存');   
+    　　}else if(xg=='保存'){   
+    　　　　$('input[name=editname]').each(function(){   
+    　　　　　　var old=$(this).html();   
+    　　　　　　var newfont=$(this).parent('p').parent('div').children().find('input').val();   
+    　　　　　　$(this).parent('p').html(newfont);   
+    　　　　})   
+    　　　　$(obj).html('修改');   
+    　　}   
+    }
+    function deleted(obj){   
+        var xg=$(obj).parent('div').attr('id').charAt(3)-1;
+        var xg1=$(obj).parent('div').attr('id');
+        console.log(xg1);
+        var my = document.getElementById("arr"+xg);
+        if (my != null){
+            var total=document.getElementById("total");
+            var one=document.getElementById("arr"+xg);
+            total.removeChild(one);
+        }
+        document.getElementById(xg1).style.display = "none";
+
+    }
+    function deleted1(obj){
+        
+        var my = document.getElementById("two");
+        if (my != null){
+            var total=document.getElementById("total");
+            var one=document.getElementById("two");
+            total.removeChild(two);
+        }
+        document.getElementById("change1").style.display = "none";
+    }
+    function deleted2(obj){
+        
+        var my = document.getElementById("one");
+        if (my != null){
+            var total=document.getElementById("total");
+            var one=document.getElementById("one");
+            total.removeChild(one);
+        }
+        document.getElementById("change").style.display = "none";
+    }
+    var id = 2;
+    function addthings(obj){
+        var total = document.getElementById("total");
+        var arr = document.createElement('div');
+        arr.id = "arr" + id++;
+        arr.innerHTML = "设备"+id;
+        total.appendChild(arr);
+    }
+    function addshebei(id){
+        var changeall = document.getElementById("changeall");
+        var arra = document.createElement('div');
+        arra.id = "obj" + id;
+        arra.innerHTML = 
+            "型号：" + "<p class='edit' style='display:inline'>4v32+id</p>"+"<br>"+
+            "编号："+"<p class='edit' style='display:inline'>5vv4</p>"+"<br>"+
+            "状态："+"<p class='edit' style='display:inline'>6v5</p>"+"<br>"+
+            "位置："+"<p class='edit' style='display:inline'>2v3</p>"+
+            "<div id='add' onclick='change(this)'>修改</div>"+
+            "<div id='delete' onclick='deleted(this)'>删除</div>"
+        ;
+        arra.style.position = "absolute";
+        arra.style.top += "60px";
+        changeall.appendChild(arra);
+        changeall.style.display = "block";
+
+    }
+    document.body.onmousedown = function(e) {
+        if (!e) {
+            e = window.event;
+        }
+        else {
+            e.srcElement = e.target;
+        }
+        // console.log("onmousedown (" + e.clientX + "," + e.clientY + ") srcElement=" + e.srcElement.tagName + "[" + e.srcElement.id + "]")
+        var a = e.srcElement.id;
+        // var targett = document.getElementById(a)
+        console.log(a);
+        if(a.charAt(0) == "a" &&a.charAt(1) == "r"){
+            var id1 = a.charAt(3);
+            id1++;
+            addshebei(id1);
+        }
+    };
+
+
+    
+</script>
+</html>

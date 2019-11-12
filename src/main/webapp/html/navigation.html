@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Document</title>
+</head>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Hl9ilifpSS4R092AugXaUPXGztehYAML"></script>
+<script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.2/jquery.min.js"></script>
+
+<link rel="stylesheet" href="../css/navigation.css" type="text/css" />
+<body>
+    <div id="allmap"></div> 
+	<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none; position: absolute; top: 150px;"></div>
+    <div id="search">
+            <input type="text" id="start" placeholder="请输入您的起点" style="border-bottom: 1px solid #DDD; " />
+            <input type="text" id="end" placeholder="请选择终点"  >
+            <div class="btn-group">
+                <button id="bus-search" class="button">公交</button>
+                <button id="driver-search" class="button">驾车</button>
+                <button id="walk-search" class="button" ">步行</button>
+            </div>
+        </div>
+    <div id="r-result"></div>
+    <div id="s-result"></div>
+    <div id="userAvatar"><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560079006087&di=86350f0eecac70820bb7a7c84cf81654&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201609%2F16%2F20160916154847_3YfGx.jpeg" alt=""></div>
+    <div id="chooseProject" onclick="showDiv()">
+        <img src="../img/设置.png" alt="">
+        <p style="display: inline">信息</p>
+        <img src="../img/箭头.png" alt="" id="changeimg">
+    </div>
+    <div id="choose">
+        <ul id="widget-menu"  style="display: none; ">
+            <li id="deviceInfo">
+                <img src="../img/眼睛.png" alt="">
+                <a href="./deviceInfo.html"><p style="display: inline">设备信息</p></a>
+            </li>
+            <li id="weather">
+                <img src="../img/天气.png" alt="">
+                <p style="display: inline">天气</p>
+            </li>
+            <li id="MonitorInfo">
+                <img src="../img/监控.png" alt="">
+                <a href="./MonitorInfo.html"><p style="display: inline">监控信息</p></a>
+            </li>
+        </ul>
+    </div>
+</body>
+</body>
+<script type="text/javascript">
+   function showDiv(){
+        var obj_lis = document.getElementById("widget-menu").getElementsByTagName("li");
+        for(i=0;i<obj_lis.length;i++){
+            obj_lis[i].onclick = function(){
+                document.getElementById('chooseProject').innerHTML = this.innerHTML;
+                document.getElementById('widget-menu').style.display = "none";
+            }
+        }
+        var a = document.getElementById('widget-menu').style.display;
+        if(a=="block"){
+            document.getElementById('widget-menu').style.display = "none";
+        }else{
+            document.getElementById('widget-menu').style.display = "block";
+        }
+       }  
+
+	// 百度地图API功能
+    function G(id) {
+		return document.getElementById(id);
+	}
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(126.627938, 45.715051), 14);
+        
+    function a(){
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
+        var walking = new BMap.WalkingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+        walking.search(start, end);
+
+    }
+    // "黑龙江大学", "黑龙江大学-3号教学楼"
+
+    var type=" ";
+        $("#bus-search,#driver-search,#walk-search").click(function(){
+            var id = $(this).attr("id");
+            $(".button").css("background-color","#fff");
+            $("#"+id).css("background-color","#3e90f7");
+            type = "bus";
+            if(id == "bus-search"){
+                type = "bus";
+            }else if(id == "driver-search"){
+                type = "driver";
+            }else if(id == "walk-search"){
+                type = "walk";
+            }
+            searchRoute();
+    });
+
+    function searchRoute(){
+            if($("#end").val().length!=0){
+                var end = $("#end").val();
+                $("#end").val("");
+            }else{
+                // var pe = window.end_point.split(",");
+                var end = document.getElementById("end").value;
+            }
+            if(type == "bus"){
+                var start = document.getElementById("start").value;
+                var transit = new BMap.TransitRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+                console.log(start)
+                console.log(end)
+                transit.search(start, end);
+            }else if(type == "driver"){
+                var start = document.getElementById("start").value;
+                var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+                driving.search(start, end);
+            }else if(type == "walk"){
+                var start = document.getElementById("start").value;
+                var walking = new BMap.WalkingRoute(map, {renderOptions:{map: map,  panel: "r-result", autoViewport: true}});
+                walking.search(start, end);
+            }
+        }
+	map.enableScrollWheelZoom(); 
+
+
+</script>
+</html>

@@ -1,9 +1,7 @@
 package com.gis_server.dao;
 
 import com.gis_server.pojo.User;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -13,11 +11,9 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
+    User selectByUsername(String username);
+
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
-
-    // ------------------------
-
-    User selectByUsername(String username);
 }

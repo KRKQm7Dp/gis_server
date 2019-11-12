@@ -1,18 +1,20 @@
 package com.gis_server.pojo;
 
-import org.apache.ibatis.type.Alias;
-
-@Alias(value="user")
 public class User {
+
+    public static final int USER_AUTHORITY_SUPERADMIN = 0;
+    public static final int USER_AUTHORITY_ADMINISTRATOR = 1;
+    public static final int USER_AUTHORITY_ORDINARY = 2;
+
     private Integer id;
 
     private String username;
 
     private String password;
 
-    private String authority;
+    private Integer authority;
 
-    public User(Integer id, String username, String password, String authority) {
+    public User(Integer id, String username, String password, Integer authority) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -47,11 +49,11 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getAuthority() {
+    public Integer getAuthority() {
         return authority;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority == null ? null : authority.trim();
+    public void setAuthority(Integer authority) {
+        this.authority = authority;
     }
 }

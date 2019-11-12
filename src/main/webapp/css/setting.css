@@ -1,0 +1,253 @@
+html{
+    height:100%
+}    
+body{
+    height:100%;
+    margin:0px;
+    padding:0px;
+}   
+li{
+    list-style:none;
+} 
+a{ 
+    text-decoration:none; 
+    color:#000; 
+}
+#allmap{
+    height:100%;
+}
+#r-result{
+    position: absolute;
+    top: 10px;
+    left: 30%;
+    border:1px solid #a5a5a0;
+}   
+#suggestId{
+    width: 350px;
+    height: 35px;
+    border: none; 
+    outline: none; 
+    -webkit-appearance: none;
+    padding-left: 10px;
+    box-shadow:1px 2px 1px rgba(0,0,0,.15);
+    border-radius: 0 2px 2px 0;
+}
+#searchID{
+    width: 60px;
+    height: 37px;
+    background-color: #1890FF;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+    border-radius: 0 2px 2px 0;
+    border: 0;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    float: right;
+    color: #fff;
+    font-size: 12px;
+}
+#navigation{
+    width: 60px;
+    height: 37px;
+    background-color: #1890FF;
+    border-radius: 0 2px 2px 0;
+    border: 0;
+    padding: 0;
+    margin: 5;
+    outline: none;
+    cursor: pointer;
+    float: right;
+    color: #fff;
+    font-size: 12px;
+}
+#s-result{
+    position: absolute;
+    top: 95px;
+    left: 35px;
+    width: 360px;
+    float: left;
+    background-color: red;
+}
+#userAvatar > img{
+    width: 45px;
+    height: 45px;
+    float:right;
+    border-radius: 10px;
+    position: absolute;
+    top: 5px;
+    right: 40px;
+    box-shadow:1px 2px 1px rgba(0,0,0,.15);
+    border-radius: 100px;
+}
+#nav{
+    width: 100%;
+    height: 55px;
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+}
+#user{
+    font-size: 12px;
+    position: absolute;
+    left: 80px;
+    top: 8px;
+}
+#nav02{
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 30px;
+    top: 16px;
+}
+#umessage{
+    width: 180px;
+    height: 100%;
+    background-color: rgb(40, 59, 121);
+    position: absolute;
+    top: 0;
+    display: none;
+    color: #fff;
+}
+#umessage > ul{
+    width: 140px;
+    height: 50px;
+    background-color: #1890FF;
+    position: absolute;
+    top: 40px;
+}
+#umessage > p:first-child{
+    color: #fff;
+    text-align: center;
+}
+#umenu{
+    height: 140px;
+}
+#umenu > p{
+    text-align:left;
+}
+#umenu > img{
+    width: 25px;
+    height: 25px;
+    position:absolute;
+    top: 17px;
+    right: 25px
+}
+#one{
+    width: 180px;
+    height: 50px;
+    text-align:left;
+    background-color:rgb(40, 59, 121);
+    text-align: center;
+    line-height: 50px;
+}  
+#one:hover{
+    background-color:#1890FF;
+}
+#two:hover{
+    background-color:#1890FF;
+}
+#two{
+    width: 180px;
+    height: 50px;
+    text-align:left;
+    background-color:rgb(40, 59, 121);
+    text-align: center;
+    line-height: 50px;
+}  
+
+
+#changeall > div{
+    width: 200px;
+    height: 150px;
+    background-color: #fff;
+    position: absolute;
+    top: 60px;
+    left: 200px;
+    padding: 20px;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+    border-radius: 0 2px 2px 0;
+    /* display: none; */
+}
+#change{
+    width: 200px;
+    height: 150px;
+    background-color: #fff;
+    position: absolute;
+    top: 60px;
+    left: 200px;
+    padding: 20px;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+    border-radius: 0 2px 2px 0;
+    display: none;
+}
+#change1{
+    width: 200px;
+    height: 150px;
+    background-color: #fff;
+    position: absolute;
+    top: 60px;
+    left: 200px;
+    padding: 20px;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+    border-radius: 0 2px 2px 0;
+    display: none;
+}
+#add{
+    width: 60px;
+    height: 30px;
+    background-color: #8BC34B;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    bottom: 15px;
+    left: 40px;
+}
+#delete{
+    width: 60px;
+    height: 30px;
+    background-color: #E64340;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    bottom: 15px;
+    right: 40px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 30px;
+}
+#total{
+    width: 180px;
+    height: 200px;
+    position: absolute;
+    right: 0;
+}
+#total > div{
+    width: 180px;
+    height: 50px;
+    text-align:left;
+    background-color:rgb(40, 59, 121);
+    text-align: center;
+    line-height: 50px;
+}
+#total > div:hover{
+    background-color:#1890FF;
+}
+#addt{
+    width: 150px;
+    height: 30px;
+    background-color: red;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    top: 700px;
+    left: 13px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 30px;
+}

@@ -23,8 +23,8 @@ public class UserServiceImplTest {
         User user = new User();
         user.setUsername("xiaowang");
         user.setPassword("123456");
-        user.setAuthority("1");
+        user.setAuthority(2);
         userService.addUser(user);
-
+        ThreadLocal
     }
 }
