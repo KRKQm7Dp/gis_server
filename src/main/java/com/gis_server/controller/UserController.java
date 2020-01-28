@@ -1,37 +1,55 @@
 package com.gis_server.controller;
 
-import com.gis_server.pojo.User;
-import com.gis_server.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.gis_server.common.entity.JsonResult;
+import com.gis_server.common.utils.ResultTool;
+import com.gis_server.pojo.SysUser;
+import com.gis_server.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
-    UserService userService;
+    SysUserService sysUserService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
-    public User login(@RequestParam(value = "username", required = true) String username,
-                      @RequestParam(value = "password", required = true) String password){
+    @RequestMapping(value = "getAllUser", method = RequestMethod.GET)
+    public JsonResult getAllUser(){
+        List<SysUser> users = sysUserService.getAllUser();
+        users.forEach(item -> {
+            item.setuPassword("");
+        });
+        return ResultTool.success(users);
+    }
 
-        logger.debug("username=" + username + "  password=" + password);
-        User user = userService.findUserByUName(username);
-        logger.debug("username=" + user.getUsername() + "  password=" + user.getPassword());
-        if(user.getPassword().equals(password)){
-            return user;
-        }
-        return user;
+    @RequestMapping(value = "getUserByPage", method = RequestMethod.GET)
+    public JsonResult getUserByPage(@RequestParam("pageNum") Integer pageNum,
+                                    @RequestParam("pageSize") Integer pageSize){
+        return ResultTool.success(sysUserService.getUserByPage(pageNum, pageSize));
+    }
+
+    @GetMapping("/getUser")
+    public JsonResult getUserById(@RequestParam("username") String uLoginid){
+        SysUser user = sysUserService.findUserByLoginID(uLoginid);
+        user.setuPassword("");
+        return ResultTool.success(user);
+    }
+
+
+    /**
+     * 用于修改用户信息
+     * Content-Type: application/json
+     * @param user
+     * @return
+     */
+    @PostMapping("modifyUser")
+    public JsonResult modifyUser(@RequestBody SysUser user){
+        System.out.println(user);
+        sysUserService.modifyUser(user);
+        return null;
     }
 
 }
